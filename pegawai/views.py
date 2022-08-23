@@ -17,7 +17,47 @@ def home(request):
     jfs =data.filter(jenis_jabatan = 1).count()
     jft = data.filter(jenis_jabatan= 2).count()
     jfu = data.filter(jenis_jabatan= 4).count()
-    gol1 = list[11,12,13]
+    #Golongan I
+    ia = data.filter(gol_id=11).count()
+    ib = data.filter(gol_id=12).count()
+    ic = data.filter(gol_id=13).count()
+    id = data.filter(gol_id=14).count()
+    totgoli = ia+ib+ic+id
+    seni = (totgoli / jumlah) * 100
+
+    # Golongan II
+    iia = data.filter(gol_id=21).count()
+    iib = data.filter(gol_id=22).count()
+    iic = data.filter(gol_id=23).count()
+    iid = data.filter(gol_id=24).count()
+    totgolii = iia + iib + iic + iid
+    senii=(totgolii/jumlah)*100
+    print(totgolii, senii)
+
+    # Golongan III
+    iiia = data.filter(gol_id=31).count()
+    iiib = data.filter(gol_id=32).count()
+    iiic = data.filter(gol_id=33).count()
+    iiid = data.filter(gol_id=34).count()
+    totgoliii = iiia + iiib + iiic + iiid
+    seniii = (totgoliii / jumlah) * 100
+    print(totgoliii)
+
+    # Golongan III
+    iva = data.filter(gol_id=41).count()
+    ivb = data.filter(gol_id=42).count()
+    ivc = data.filter(gol_id=43).count()
+    ivd = data.filter(gol_id=44).count()
+    ive = data.filter(gol_id=45).count()
+    totgoliv = iva + ivb + ivc + ivd + ive
+    seniv = (totgoliv / jumlah) * 100
+    print(totgoliv)
+
+    # for i in goli:
+    #     totalgoli = data.filter(gol_id=i).count()
+    #     #print(totalgoli)
+    #     total = int(totalgoli)
+    #     for x in total:
     filterku = FilterTPegawaiSapk(request.GET, queryset=data)
     data = filterku.qs
     formfilter = FormTPegawaiSapk
@@ -25,9 +65,16 @@ def home(request):
         'data': data, 'jft':jft, 'jfs':jfs,'jfu':jfu,
         'pria': pria,
         'perempuan': perempuan,
-        'jumlah': jumlah
+        'jumlah': jumlah,
+        'i':totgoli,
+        'ii':totgolii,
+        'iii':totgoliii,
+        'iv':totgoliv,
+        'seni':seni,
+        'senii':senii,
+        'seniii':seniii,
+        'seniv':seniv
     }
-    print(pria, perempuan)
     return render(request, "registration/success.html", context)
 
 
