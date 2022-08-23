@@ -7,8 +7,8 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="index.html"><img src="images/logo.svg" class="mr-2" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo-mini.svg" alt="logo"/></a>
+        <a class="navbar-brand brand-logo mr-5" href="/home"><img src="images/logo.svg" class="mr-2" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="/home"><img src="images/logo-mini.svg" alt="logo"/></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -91,7 +91,7 @@
             </div>
           </li>
           <li class="nav-item nav-settings d-none d-lg-flex">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="/logout">
               <i class="icon-ellipsis"></i>
             </a>
           </li>
@@ -277,7 +277,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="/home">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Dashboard</span>
             </a>
@@ -352,8 +352,8 @@
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/login"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/register"> Register </a></li>
               </ul>
             </div>
           </li>
@@ -385,7 +385,7 @@
             <div class="col-md-12 grid-margin">
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                  <h3 class="font-weight-bold">Welcome {{data.user}} </h3>
+                  <h3 class="font-weight-bold">Welcome </h3>
                   <h6 class="font-weight-normal mb-0">All systems are running smoothly! You have <span class="text-primary">3 unread alerts!</span></h6>
                 </div>
                 <div class="col-12 col-xl-4">
@@ -430,18 +430,17 @@
                 <div class="col-md-6 mb-4 stretch-card transparent">
                   <div class="card card-tale">
                     <div class="card-body">
-                      <p class="mb-4">Today’s Bookings</p>
-                      <p class="fs-30 mb-2">4006</p>
-                      <p>10.00% (30 days)</p>
+                      <p class="mb-4">Jumlah Pegawai</p>
+                      <p class="fs-30 mb-2">{{jumlah}}</p>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-6 mb-4 stretch-card transparent">
                   <div class="card card-dark-blue">
                     <div class="card-body">
-                      <p class="mb-4">Total Bookings</p>
-                      <p class="fs-30 mb-2">61344</p>
-                      <p>22.00% (30 days)</p>
+                      <p class="mb-4">Berdasarkan Jenis Kelamin</p>
+                      <p class="fs-30 mb-2">Laki-Laki : {{pria}}</p>
+                      <p class="fs-30 mb-2">Perempuan : {{perempuan}}</p>
                     </div>
                   </div>
                 </div>
@@ -450,18 +449,21 @@
                 <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
                   <div class="card card-light-blue">
                     <div class="card-body">
-                      <p class="mb-4">Number of Meetings</p>
-                      <p class="fs-30 mb-2">34040</p>
-                      <p>2.00% (30 days)</p>
+                      <p class="mb-4">Berdasarkan Jenis Jabatan </p>
+                      <p class="fs-29 mb-2">Struktural : {{jfs}}</p>
+                      <p class="fs-29 mb-2">Fungsional Tertentu : {{jft}} </p>
+                      <p class="fs-29 mb-2">Fungsional Umum : {{jfu}}</p>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-6 stretch-card transparent">
                   <div class="card card-light-danger">
                     <div class="card-body">
-                      <p class="mb-4">Number of Clients</p>
-                      <p class="fs-30 mb-2">47033</p>
-                      <p>0.22% (30 days)</p>
+                      <p class="mb-4">Berdasarkan Golongan</p>
+                      <p class="fs-29 mb-0">Golongan IV : {{jfs}} fake</p>
+                      <p class="fs-29 mb-0">Golongan III : {{jft}} fake</p>
+                      <p class="fs-29 mb-0">Golongan II : {{jfu}} fake</p>
+                      <p class="fs-29 mb-0">Golongan I : {{jfu}} fake</p>
                     </div>
                   </div>
                 </div>

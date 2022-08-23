@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import TPegawaiSapk
 from .filter import FilterTPegawaiSapk
+from .forms import *
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -11,17 +12,22 @@ from django.contrib.auth.models import User
 def home(request):
     data = TPegawaiSapk.objects.all()
     jumlah = data.count()
-    laki_laki = TPegawaiSapk.objects.filter(jenis_kelamin = 'M').count()
-    perempuan = TPegawaiSapk.objects.filter(jenis_kelamin = 'F').count()
+    pria = data.filter(jenis_kelamin = 'M').count()
+    perempuan = data.filter(jenis_kelamin = 'F').count()
+    jfs =data.filter(jenis_jabatan = 1).count()
+    jft = data.filter(jenis_jabatan= 2).count()
+    jfu = data.filter(jenis_jabatan= 4).count()
+    gol1 = list[11,12,13]
     filterku = FilterTPegawaiSapk(request.GET, queryset=data)
     data = filterku.qs
+    formfilter = FormTPegawaiSapk
     context = {
-        'data': data,
-        'laki-laki': laki_laki,
+        'data': data, 'jft':jft, 'jfs':jfs,'jfu':jfu,
+        'pria': pria,
         'perempuan': perempuan,
         'jumlah': jumlah
     }
-    print(jumlah, laki_laki, perempuan)
+    print(pria, perempuan)
     return render(request, "registration/success.html", context)
 
 
