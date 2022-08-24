@@ -1,7 +1,10 @@
+import datetime
+
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+import time, calendar
 from .models import TPegawaiSapk
 from .filter import FilterTPegawaiSapk
 from .forms import *
@@ -17,6 +20,10 @@ def home(request):
     jfs =data.filter(jenis_jabatan = 1).count()
     jft = data.filter(jenis_jabatan= 2).count()
     jfu = data.filter(jenis_jabatan= 4).count()
+
+    senjfs = (jfs/jumlah)*100
+    senjft = (jft/jumlah)*100
+    senjfu = (jfu/jumlah)*100
     #Golongan I
     ia = data.filter(gol_id=11).count()
     ib = data.filter(gol_id=12).count()
@@ -52,12 +59,8 @@ def home(request):
     totgoliv = iva + ivb + ivc + ivd + ive
     seniv = (totgoliv / jumlah) * 100
     print(totgoliv)
+    localtime = datetime.datetime.now()
 
-    # for i in goli:
-    #     totalgoli = data.filter(gol_id=i).count()
-    #     #print(totalgoli)
-    #     total = int(totalgoli)
-    #     for x in total:
     filterku = FilterTPegawaiSapk(request.GET, queryset=data)
     data = filterku.qs
     formfilter = FormTPegawaiSapk
@@ -66,14 +69,9 @@ def home(request):
         'pria': pria,
         'perempuan': perempuan,
         'jumlah': jumlah,
-        'i':totgoli,
-        'ii':totgolii,
-        'iii':totgoliii,
-        'iv':totgoliv,
-        'seni':seni,
-        'senii':senii,
-        'seniii':seniii,
-        'seniv':seniv
+        'i':totgoli,'ii':totgolii,'iii':totgoliii,'iv':totgoliv,'seni':seni,'senii':senii,'seniii':seniii,'seniv':seniv,
+        'localtime':localtime,
+        'senjft':senjft, 'senjfu':senjfu, 'senjfs':senjfs
     }
     return render(request, "registration/success.html", context)
 
