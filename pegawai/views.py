@@ -1,13 +1,13 @@
 import datetime
-
-from django.shortcuts import render, redirect, reverse
+from django.utils import timezone
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-import time, calendar
-from .models import TPegawaiSapk
-from .filter import FilterTPegawaiSapk
 from .forms import *
+from django.views.generic.list import ListView
+from django.db.models import Q
+from django.shortcuts import get_list_or_404, render, get_object_or_404, redirect, HttpResponseRedirect, reverse
+
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -60,10 +60,6 @@ def home(request):
     seniv = (totgoliv / jumlah) * 100
     print(totgoliv)
     localtime = datetime.datetime.now()
-
-    filterku = FilterTPegawaiSapk(request.GET, queryset=data)
-    data = filterku.qs
-    formfilter = FormTPegawaiSapk
     context = {
         'data': data, 'jft':jft, 'jfs':jfs,'jfu':jfu,
         'pria': pria,
@@ -73,7 +69,18 @@ def home(request):
         'localtime':localtime,
         'senjft':senjft, 'senjfu':senjfu, 'senjfs':senjfs
     }
-    return render(request, "registration/success.html", context)
+    return render(request, "pegawai/dashboard.html", context)
+
+
+class ListTPegawaisapk(ListView):
+    model = TPegawaiSapk
+    paginate_by = 100  # if pagination is desired
+    context_object_name = 'data'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
 
 
 def register(request):
@@ -89,3 +96,27 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
+
+def CariView(request):
+    if 'q' in request.GET:
+        q = request.GET['q']
+        multiple_q = Q(Q(nama__icontains=q) | Q(nip_baru__icontains=q))
+        data = TPegawaiSapk.objects.filter(multiple_q)
+    else:
+        data = TPegawaiSapk.objects.all()
+    context = {
+        'data': data
+    }
+    return render(request, 'pegawai/tpegawaisapk_list.html', context)
+
+
+def ProfileView(request, nip_baru):
+    pegawai = TPegawaiSapk.objects.get(nip_baru=nip_baru)
+    template_name = 'pegawai/profile.html'
+    form = FormTpegawaiSapk(instance=pegawai)
+    context = {
+        'pegawai':pegawai,
+        'form':form
+    }
+    return render(request,template_name, context)
+

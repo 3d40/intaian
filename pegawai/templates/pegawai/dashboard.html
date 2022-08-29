@@ -1,0 +1,70 @@
+{% include 'bootstrap/base.html' %}
+<!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                  <h3 class="font-weight-bold">ASN Provinsi Jambi dalam Angka </h3>
+                  <h6 class="font-weight-normal mb-0">Data live<span class="text-primary"> berdasarkan record terbaru!</span></h6>
+                </div>
+                <div class="col-12 col-xl-4">
+                 <div class="justify-content-end d-flex">
+                  <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                    <button class="btn btn-sm btn-light bg-white" type="button" id="dropdownMenuDate2"  aria-haspopup="true" aria-expanded="true">
+                     <i class="mdi mdi-calendar"></i> Today {{localtime}}
+                    </button>
+                  </div>
+                 </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% include 'bootstrap/exclude/grafik.html' %}
+          <div class="row">
+            <div class="col-md-6 grid-margin transparent">
+              <div class="row">
+                <div class="col-md-6 mb-4 stretch-card transparent">
+<!--                  <div class="card card-tale">-->
+<!--                    <div class="card-body">-->
+<!--                      <p class="mb-4">Jumlah Pegawai</p>-->
+<!--                      <p class="fs-30 mb-2">{{jumlah}}</p>-->
+<!--                    </div>-->
+                  </div>
+                </div>
+                <div class="col-md-6 mb-4 stretch-card transparent">
+                  <div class="card card-dark-blue">
+<!--                    <div class="card-body">-->
+<!--                      <p class="mb-4">Berdasarkan Jenis Kelamin</p>-->
+<!--                      <p class="fs-30 mb-2">Laki-Laki : {{pria}}</p>-->
+<!--                      <p class="fs-30 mb-2">Perempuan : {{perempuan}}</p>-->
+<!--                    </div>-->
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-4 mb-lg-0 stretch-card transparent">
+                  <div class="card card-light-blue">
+<!--                    <div class="card-body">-->
+<!--                      <p class="mb-4">Berdasarkan Jenis Jabatan </p>-->
+<!--                      <p class="fs-29 mb-2">Struktural : {{jfs}}</p>-->
+<!--                      <p class="fs-29 mb-2">Fungsional Tertentu : {{jft}} </p>-->
+<!--                      <p class="fs-29 mb-2">Fungsional Umum : {{jfu}}</p>-->
+<!--                    </div>-->
+                  </div>
+                </div>
+                <div class="col-md-6 stretch-card transparent">
+<!--                  <div class="card card-light-danger">-->
+<!--                    <div class="card-body">-->
+<!--                      <p class="mb-4">Berdasarkan Golongan</p>-->
+<!--                      <p class="fs-29 mb-0">Golongan IV : {{jfs}} fake</p>-->
+<!--                      <p class="fs-29 mb-0">Golongan III : {{jft}} fake</p>-->
+<!--                      <p class="fs-29 mb-0">Golongan II : {{jfu}} fake</p>-->
+<!--                      <p class="fs-29 mb-0">Golongan I : {{jfu}} fake</p>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+              </div>
+            </div>
+          </div>

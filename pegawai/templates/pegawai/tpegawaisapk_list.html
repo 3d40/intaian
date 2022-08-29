@@ -1,0 +1,63 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
+<div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Data ASN Pemerintah Provinsi Jambi</h4>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                            NIP
+                          </th>
+                          <th>
+                            Nama
+                          </th>
+                          <th>
+                            Pangkat Golongan
+                          </th>
+                          <th>
+                            Instansi Induk
+                          </th>
+                           <th>
+                            Pendidikan
+                          </th>
+                          <th>
+                            Instansi
+                          </th>
+                        </tr>
+                      </thead>
+                         {% for data in data %}
+                      <tbody>
+                        <tr>
+                          <td class="py-1">
+                            <a href="{% url 'pegawai:profile' data.nip_baru%}">
+                              {{data.nip_baru}}
+                            </a>
+                          </td>
+                          <td>
+                            {{data.nama}}
+                          </td>
+                          <td>
+                            ({{data.gol}}) {{data.gol.nama_pangkat}}
+                          </td>
+                          <td>
+                            {{data.unor_induk}}
+                          </td>
+                          <td>
+                            {{data.pendidikan}}
+                          </td>
+                          <td>
+                            {{data.unor}}
+                          </td>
+                        </tr>
+                      </tbody>
+                      {% endfor %}
+                    </table>
+                  </div>
+                  {% include 'bootstrap/paginator.html' %}
+                </div>
+              </div>
+            </div>
+{% endblock %}
