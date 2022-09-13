@@ -18,6 +18,9 @@
                             Pangkat Golongan
                           </th>
                           <th>
+                            Jabatan
+                          </th>
+                          <th>
                             Instansi Induk
                           </th>
                            <th>
@@ -25,6 +28,9 @@
                           </th>
                           <th>
                             Instansi
+                          </th>
+                          <th>
+                            Riwayat Jabatan
                           </th>
                         </tr>
                       </thead>
@@ -43,6 +49,9 @@
                             ({{data.gol}}) {{data.gol.nama_pangkat}}
                           </td>
                           <td>
+                            {{data.jabatan_id}}
+                          </td>
+                          <td>
                             {{data.unor_induk}}
                           </td>
                           <td>
@@ -50,6 +59,9 @@
                           </td>
                           <td>
                             {{data.unor}}
+                          </td>
+                          <td>
+                            <a href="{% url 'pegawai:jabatan' data.nip_baru %}">Tampilkan</a>
                           </td>
                         </tr>
                       </tbody>

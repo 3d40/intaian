@@ -1,0 +1,8 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
+{{pegawai.nama}}<br/>
+{% for dp3 in dp3 %}
+{{forloop.counter}}.{{dp3.tahun}} | {{dp3.jumlah}} | {{dp3.nilai_ratarata}}<br/>
+
+{% endfor%}
+{% endblock %}

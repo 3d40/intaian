@@ -64,9 +64,9 @@ class TJenjangJabatan(models.Model):
 
 
 class TKelompokJabatan(models.Model):
-    rumpun= models.ForeignKey('TRumpunJabatan', max_length=34, on_delete=models.CASCADE)  # Field name made lowercase.
-    nama = models.CharField(db_column='NAMA', max_length=115)  # Field name made lowercase.
     id = models.CharField(db_column='ID', unique=True, max_length=34, primary_key=True)  # Field name made lowercase.
+    nama = models.CharField(db_column='NAMA', max_length=115)  # Field name made lowercase.
+    rumpun= models.ForeignKey('TRumpunJabatan', max_length=34, on_delete=models.CASCADE)  # Field name made lowercase.
     tugas_pokok = models.CharField(db_column='TUGAS_POKOK', max_length=300)  # Field name made lowercase.
     pejabat_pak = models.CharField(db_column='PEJABAT_PAK', max_length=300)  # Field name made lowercase.
     lingkup = models.CharField(db_column='LINGKUP', max_length=2)  # Field name made lowercase.
@@ -158,8 +158,8 @@ class TPegawaiSapk(models.Model):
     mk_tahun = models.IntegerField(db_column='MK_TAHUN', blank=True, null=True)  # Field name made lowercase.
     mk_bulan = models.IntegerField(db_column='MK_BULAN', blank=True, null=True)  # Field name made lowercase.
     jenis_jabatan= models.ForeignKey('TJenisJabatan',on_delete=models.DO_NOTHING)  # Field name made lowercase.
-    jabatan_id = models.IntegerField(db_column='JABATAN_ID')  # Field name made lowercase.
-    tingkat_pendidikan_id = models.CharField(db_column='TINGKAT_PENDIDIKAN_ID', max_length=2)  # Field name made lowercase.
+    jabatan = models.ForeignKey('TKelompokJabatan', on_delete=models.DO_NOTHING, null=True)  # Field name made lowercase.
+    tingkat_pendidikan= models.ForeignKey('TTingkatPendidikan', on_delete=models.DO_NOTHING)  # Field name made lowercase.
     pendidikan= models.ForeignKey('TPendidikan', max_length=32, on_delete=models.CASCADE)  # Field name made lowercase.
     kpkn= models.CharField(db_column='KPKN_ID', max_length=32)  # Field name made lowercase.
     lokasi_kerja = models.ForeignKey('TLokasi', max_length=32, related_name='LOKASI_KERJA_ID', on_delete=models.CASCADE)  # Field name made lowercase.
@@ -279,3 +279,95 @@ class TUser(models.Model):
 
     def __str__(self):
         return self.nama
+
+
+class TRiwayatJabatan(models.Model):
+    id = models.CharField(db_column='ID', primary_key=True, max_length=32)  # Field name made lowercase.
+    nip = models.CharField(db_column='NIP', max_length=18)  # Field name made lowercase.
+    id_orang = models.ForeignKey('TPegawaiSapk', max_length=32, on_delete=models.CASCADE, db_column='Id_Orang')  # Field name made lowercase.
+    nama = models.CharField(db_column='Nama', max_length=40)  # Field name made lowercase.
+    unor = models.ForeignKey('TUnor', max_length=32, on_delete=models.CASCADE, db_column='Id_Unor')  # Field name made lowercase.
+    jenis_jabatan = models.ForeignKey('TJenisJabatan', blank=True, null=True, on_delete=models.CASCADE, db_column='Id_Jenis_Jabatan')  # Field name made lowercase.
+    id_jabatan = models.CharField(db_column='Id_Jabatan', max_length=32, blank=True, null=True)  # Field name made lowercase.
+    id_eselon = models.IntegerField(db_column='Id_Eselon', blank=True, null=True)  # Field name made lowercase.
+    eselon = models.CharField(db_column='Eselon', max_length=5, blank=True, null=True)  # Field name made lowercase.
+    tmt_jabatan = models.CharField(db_column='TMT_Jabatan', max_length=14)  # Field name made lowercase.
+    nomor_sk = models.CharField(db_column='Nomor_SK', max_length=52, blank=True, null=True)  # Field name made lowercase.
+    tanggal_sk = models.CharField(db_column='Tanggal_SK', max_length=14, blank=True, null=True)  # Field name made lowercase.
+    id_satuan_kerja = models.CharField(db_column='Id_Satuan_Kerja', max_length=32)  # Field name made lowercase.
+    tmt_pelantikan = models.CharField(db_column='TMT_Pelantikan', max_length=14, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 't_riwayat_jabatan'
+
+    def __str__(self):
+        return self.nama
+
+class TRiwayatGolongan(models.Model):
+    id = models.CharField(db_column='ID', primary_key=True, max_length=32)  # Field name made lowercase.
+    id_orang = models.ForeignKey('TPegawaiSapk', max_length=32, on_delete=models.CASCADE, db_column='id_orang')  # Field name made lowercase.
+    kode_jenis_kp = models.IntegerField(db_column='Kode_Jenis_KP', blank=True, null=True)  # Field name made lowercase.
+    jenis_kp = models.CharField(db_column='Jenis_KP', max_length=52, blank=True, null=True)  # Field name made lowercase.
+    id_golongan = models.ForeignKey('TKodeGolongan', max_length=32, on_delete=models.CASCADE, db_column='id_golongan')  # Field name made lowercase.
+    sk_nomor = models.CharField(db_column='SK_Nomor', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    sk_tanggal = models.CharField(db_column='Sk_Tanggal', max_length=14, blank=True, null=True)  # Field name made lowercase.
+    nomor_bkn = models.CharField(db_column='Nomor_BKN', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    tanggal_bkn = models.CharField(db_column='Tanggal_BKN', max_length=14, blank=True, null=True)  # Field name made lowercase.
+    tmt_golongan = models.CharField(db_column='TMT_Golongan', max_length=14, blank=True, null=True)  # Field name made lowercase.
+    jumlah_angka_kredit_utama = models.DecimalField(db_column='Jumlah_Angka_Kredit_Utama', max_digits=8, decimal_places=3, blank=True, null=True)  # Field name made lowercase.
+    jumlah_angka_kredit_tambahan = models.DecimalField(db_column='Jumlah_Angka_Kredit_Tambahan', max_digits=7, decimal_places=3, blank=True, null=True)  # Field name made lowercase.
+    mk_golongan_tahun = models.IntegerField(db_column='MK_Golongan_Tahun', blank=True, null=True)  # Field name made lowercase.
+    mk_golongan_bulan = models.IntegerField(db_column='MK_Golongan_Bulan', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 't_riwayat_golongan'
+
+    def __str__(self):
+        return self.jenis_kp
+
+class TRiwayatDp3(models.Model):
+    id = models.CharField(db_column='ID', primary_key=True, max_length=32)  # Field name made lowercase.
+    id_pns = models.ForeignKey('TPegawaiSapk', max_length=32, on_delete=models.CASCADE, db_column='id_pns')
+    id_jenis_jabatan = models.ForeignKey('TJenisJabatan', max_length=32, on_delete=models.CASCADE, db_column='id_jenis_jabatan')
+    nama_jenis_jabatan = models.CharField(db_column='NAMA_JENIS_JABATAN', max_length=27, blank=True, null=True)  # Field name made lowercase.
+    tahun = models.IntegerField(db_column='TAHUN')  # Field name made lowercase.
+    kesetiaan = models.DecimalField(db_column='KESETIAAN', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    prestasi_kerja = models.DecimalField(db_column='PRESTASI_KERJA', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    tanggung_jawab = models.DecimalField(db_column='TANGGUNG_JAWAB', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    ketaatan = models.DecimalField(db_column='KETAATAN', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    kejujuran = models.DecimalField(db_column='KEJUJURAN', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    kerjasama = models.DecimalField(db_column='KERJASAMA', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    prakarsa = models.DecimalField(db_column='PRAKARSA', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    kepemimpinan = models.IntegerField(db_column='KEPEMIMPINAN')  # Field name made lowercase.
+    jumlah = models.DecimalField(db_column='JUMLAH', max_digits=6, decimal_places=2)  # Field name made lowercase.
+    nilai_ratarata = models.DecimalField(db_column='NILAI_RATARATA', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    status_pejabat_penilai = models.CharField(db_column='STATUS_PEJABAT_PENILAI', max_length=9, blank=True, null=True)  # Field name made lowercase.
+    id_pejabat_penilai = models.ForeignKey('TPegawaiSapk', max_length=32, on_delete=models.CASCADE, db_column='id_pejabat_penilai', related_name='id_pejabat_penilai')
+    nipnrp_pejabat_penilai = models.CharField(db_column='NIPNRP_PEJABAT_PENILAI', max_length=19, blank=True, null=True)  # Field name made lowercase.
+    nama_pejabat_penilai = models.CharField(db_column='NAMA_PEJABAT_PENILAI', max_length=32, blank=True, null=True)  # Field name made lowercase.
+    jabatan_pejabat_penilai = models.CharField(db_column='JABATAN_PEJABAT_PENILAI', max_length=95, blank=True, null=True)  # Field name made lowercase.
+    golongan_pejabat_penilai = models.CharField(db_column='GOLONGAN_PEJABAT_PENILAI', max_length=6, blank=True, null=True)  # Field name made lowercase.
+    tmt_golongan_pejabat_penilai = models.CharField(db_column='TMT_GOLONGAN_PEJABAT_PENILAI', max_length=14, blank=True, null=True)  # Field name made lowercase.
+    nama_unor_pejabat_penilai = models.CharField(db_column='NAMA_UNOR_PEJABAT_PENILAI', max_length=94, blank=True, null=True)  # Field name made lowercase.
+    status_atasan_penilai = models.CharField(db_column='STATUS_ATASAN_PENILAI', max_length=9, blank=True, null=True)  # Field name made lowercase.
+    id_atasan_penilai = models.CharField(db_column='ID_ATASAN_PENILAI', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    nipnrp_atasan_penilai = models.CharField(db_column='NIPNRP_ATASAN_PENILAI', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    nama_atasan_penilai = models.CharField(db_column='NAMA_ATASAN_PENILAI', max_length=30, blank=True, null=True)  # Field name made lowercase.
+    jabatan_atasan_penilai = models.CharField(db_column='JABATAN_ATASAN_PENILAI', max_length=81, blank=True, null=True)  # Field name made lowercase.
+    golongan_atasan_penilai = models.CharField(db_column='GOLONGAN_ATASAN_PENILAI', max_length=12, blank=True, null=True)  # Field name made lowercase.
+    tmt_golongan_atasan_penilai = models.CharField(db_column='TMT_GOLONGAN_ATASAN_PENILAI', max_length=14, blank=True, null=True)  # Field name made lowercase.
+    nama_unor_atasan_penilai = models.CharField(db_column='NAMA_UNOR_ATASAN_PENILAI', max_length=85, blank=True, null=True) # Field name made lowercase.
+    dokumen = models.FileField(upload_to='documents/')
+
+    class Meta:
+        managed = False
+        db_table = 't_riwayat_dp3'
+
+    def __str__(self):
+        return str(self.id_pns)
+
+
+
+

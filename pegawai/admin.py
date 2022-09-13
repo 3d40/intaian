@@ -13,3 +13,8 @@ admin.site.register(TLokasi)
 admin.site.register(TPegawaiSapk)
 admin.site.register(TPendidikan)
 admin.site.register(TTingkatPendidikan)
+admin.site.register(TRiwayatJabatan)
+admin.site.register(TRumpunJabatan)
+admin.site.register(TRiwayatGolongan)
+admin.site.register(TRiwayatDp3)
+

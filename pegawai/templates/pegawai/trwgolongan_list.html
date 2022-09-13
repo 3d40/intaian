@@ -1,0 +1,8 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
+{{pegawai.nama}}<br/>
+{% for golongan in golongan %}
+{{forloop.counter}}.{{golongan.jenis_kp}} | {{golongan.sk_nomor}} | {{golongan.sk_tanggal}} | {{golongan.tmt_golongan}}<br/>
+
+{% endfor%}
+{% endblock %}

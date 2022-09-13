@@ -1,0 +1,7 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
+{{pegawai.nama}}<br/>
+{% for jabatan in jabatan%}
+{{forloop.counter}}.{{jabatan.jenis_jabatan}} | {{jabatan.tmt_jabatan}} | {{jabatan.unor}}<br/>
+{% endfor%}
+{% endblock %}

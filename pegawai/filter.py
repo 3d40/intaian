@@ -11,3 +11,8 @@ class FilterTPegawaiSapk(django_filters.FilterSet):
 		model = TPegawaiSapk
 		fields = '__all__'
 		exclude = ['jenis_kelamin', 'date_created']
+
+class PegawaiFilter(django_filters.FilterSet):
+    class Meta:
+        model = TPegawaiSapk
+        fields = '__all__'

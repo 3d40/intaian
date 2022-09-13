@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pegawai',
+    'arsip',
     'django_filters'
 ]
 
@@ -132,4 +133,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Login & Logout URLs
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/pegawai'
-LOGOUT_REDIRECT_URL = '/login'
+LOGOUT_REDIRECT_URL = ''
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'bonces143@gmail.com'
+EMAIL_HOST_PASSWORD = 'aamjygkoyaungxmb'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
