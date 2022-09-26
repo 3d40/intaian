@@ -5,7 +5,7 @@ from django.urls import path
  
 app_name = 'pegawai'
 urlpatterns = [
-    path('', auth_views.LoginView.as_view(), name='login'),
+    path('', views.LoginView, name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.signup, name='signup'),
     path('pegawai/', views.home, name='dashboard'),
@@ -19,5 +19,5 @@ urlpatterns = [
     path('pegawai/profile/golongan/<str:nip_baru>', views.RiwayatGolonganView, name='golongan'),
     path('pegawai/profile/dp3/<str:nip_baru>', views.Riwayatdp3View, name='dp3'),
     path('pegawai/profile/(<uidb64>[0-9A-Za-z_\-]+)/(<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',views.activate, name='activate'),
-
+    path('pegawai/search', views.search, name='search'),
 ]

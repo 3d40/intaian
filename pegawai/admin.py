@@ -17,4 +17,8 @@ admin.site.register(TRiwayatJabatan)
 admin.site.register(TRumpunJabatan)
 admin.site.register(TRiwayatGolongan)
 admin.site.register(TRiwayatDp3)
+admin.site.register(TOpd)
+admin.site.register(TJabatan)
+admin.site.register(TUser)
+admin.site.register(TJenisUser)
 

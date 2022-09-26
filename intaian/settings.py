@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pegawai',
-    'arsip',
-    'django_filters'
+    'django_filters',
+    'django_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +85,8 @@ DATABASES = {
         'PASSWORD': '',
         'HOST':'localhost',
         'PORT':'3306',
+        'OPTIONS': {
+            'sql_mode': 'traditional',}
     }
 }
 
@@ -131,9 +133,9 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Login & Logout URLs
-LOGIN_URL = '/login'
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/pegawai'
-LOGOUT_REDIRECT_URL = ''
+LOGOUT_REDIRECT_URL = '/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -144,3 +146,4 @@ EMAIL_HOST_PASSWORD = 'aamjygkoyaungxmb'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
