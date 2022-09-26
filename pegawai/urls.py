@@ -20,4 +20,5 @@ urlpatterns = [
     path('pegawai/profile/dp3/<str:nip_baru>', views.Riwayatdp3View, name='dp3'),
     path('pegawai/profile/(<uidb64>[0-9A-Za-z_\-]+)/(<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',views.activate, name='activate'),
     path('pegawai/search', views.search, name='search'),
+    path('pegawai/filter', views.filter, name='filter'),
 ]

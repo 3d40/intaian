@@ -447,15 +447,3 @@ class TJenisUser(models.Model):
 
     def __str__(self):
         return str(self.jenis)
-
-
-# class FileModel(models.Model):
-#     id = models.IntegerField(primary_key=True,auto_created=True)
-#     status_choice = [
-#         ('nihil','Tidak Ada'),
-#         ('tersimpan','Tersimpan'),
-#         ('verifikasi','Verifikasi'),
-#         ('benar','Benar')
-#     ]
-#     status = models.CharField(max_length=30, default='nihil', choices=status_choice)
-#     nama = models.ForeignKey()

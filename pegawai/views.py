@@ -1,6 +1,7 @@
 from ast import operator
 from codecs import namereplace_errors
 import datetime
+from pyexpat import model
 from tkinter import Y
 from django.conf import settings
 from webbrowser import get
@@ -323,12 +324,10 @@ def LoginView(request):
                 try:
                     page_obj = paginator.page(page_num)
                 except PageNotAnInteger:
-                    # if page is not an integer, deliver the first page
                     page_obj = paginator.page(1)
                 except EmptyPage:
-                    #if the page is out of range, deliver the last page
                     page_obj = paginator.page(paginator.num_pages)
-                # return HttpResponseRedirect(reverse('pegawai:dashboard'))
+
                 return render(request, 'pegawai/pegawai_list.html',{'page_obj':page_obj})
             elif user.is_active and tipeuser.jenis =='Verifikator':
                 data = TPegawaiSapk.objects.all()
@@ -338,14 +337,10 @@ def LoginView(request):
                 try:
                     page_obj = paginator.page(page_num)
                 except PageNotAnInteger:
-                    # if page is not an integer, deliver the first page
                     page_obj = paginator.page(1)
                 except EmptyPage:
-                    #if the page is out of range, deliver the last page
                     page_obj = paginator.page(paginator.num_pages)
-                # return HttpResponseRedirect(reverse('pegawai:dashboard'))
                 return render(request, 'pegawai/pegawai_list.html',{'page_obj':page_obj})
-                # return HttpResponseRedirect(reverse('pegawai:dashboard'))
             else:
                 return HttpResponse("Your account was inactive.")
         else:
@@ -354,3 +349,10 @@ def LoginView(request):
             return HttpResponse("Akun anda belum terdaftar")
     else:
         return render(request, 'registration/login.html', {})
+
+def filter(request):
+    user_list = TPegawaiSapk.objects.all()
+    user_filter = FilterTPegawaiSapk(request.GET, queryset=user_list)
+    jumlah = user_list.count
+
+    return render(request, 'pegawai/search_results.html', {'filter': user_filter, 'jumlah':jumlah})
