@@ -21,4 +21,13 @@ urlpatterns = [
     path('pegawai/profile/(<uidb64>[0-9A-Za-z_\-]+)/(<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',views.activate, name='activate'),
     path('pegawai/search', views.search, name='search'),
     path('pegawai/filter', views.filter, name='filter'),
+    path('pegawai/pensiun', views.PensiunView, name='pensiun'),
+
+    #input data
+    path('pegawai/input/skp', views.InputSkpView.as_view(), name='inputskp'),
+    path('pegawai/input/skp/detail/<str:id>', views.SkpDetailView, name='skpdetail'),
+    path('pegawai/input/jabatan', views.InputJabatanView, name='inputjabatan'),
+    path('pegawai/input/jabatan/<str:id>', views.EditJabatanView, name='editjabatan'),
+    path('pegawai/input/pangkat/<str:id>', views.InputPangkatView, name='inputpangkat'),
+
 ]

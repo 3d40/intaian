@@ -1,0 +1,53 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
+{{pegawai.nama}}<br/>
+{{pegawai.nip_baru}}<br/>
+<table class="table table-dark">
+    <thead>
+      <tr>
+        <th>Nomor</th>
+        <th>Tahun</th>
+        <th>Nama Jabatan</th>
+        <th>Pangkat Golongan</th>
+        <th>Nilai Prestasi Kerja</th>
+        <th>Nama Pejabat Penilai</th>
+        <th>Instansi</th>
+      </tr>
+    </thead>
+    {% for obj in dp3 %}
+    <tbody>
+      <tr>
+        <td>
+          {{forloop.counter}}
+        </td>
+        <td class="py-1">
+           <a href="{% url 'pegawai:skpdetail' obj.pk %}">{{obj.tahun}}</a> 
+          </a>
+        </td>
+        <td>
+          {{obj.id_jenis_jabatan}}
+        </td>
+        <td>
+            {{obj.id_pns.gol.nama_pangkat}} ({{obj.id_pns.gol}})  
+        </a>
+
+        </td>
+        <td >
+            {{obj.prestasi_kerja}}                                
+          </a>
+        </td>
+        <td >
+            {{obj.nama_pejabat_penilai}}                                
+          </a>
+        </td>
+        <td>
+          {{obj.nama_unor_atasan_penilai}}
+        </td>
+        <td>
+         {{obj.tingkat_pendidikan}}
+        </td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table> 
+{% endblock %}

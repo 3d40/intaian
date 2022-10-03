@@ -1,5 +1,4 @@
-{% load static %}
-<div class="row">
+{% block content %}
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card position-relative">
                 <div class="card-body">
@@ -61,11 +60,4 @@
                               </div>
                               <div>{% include 'bootstrap/exclude/donat.html' %}</div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {% endblock %}

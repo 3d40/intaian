@@ -1,16 +1,34 @@
-from ast import operator
+from ast import Slice
+from cgitb import enable
+import email
+from multiprocessing import context
+from operator import ge
+from pickle import FALSE
+from pickletools import int4
+from re import template
+from dateutil.relativedelta import *
 from codecs import namereplace_errors
 import datetime
+from itertools import count
 from pyexpat import model
 from tkinter import Y
+from turtle import update
 from django.conf import settings
 from webbrowser import get
 from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+
 from .forms import *
-from django.views.generic import ListView, DetailView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
+from django.views.generic.edit import FormMixin, SingleObjectMixin
 from django.db.models import Q
 from django.shortcuts import get_list_or_404, render, get_object_or_404, redirect, HttpResponseRedirect, reverse
 from .models import *
@@ -37,8 +55,10 @@ from .token import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.auth.models import User
 from .filter import *
+from datetime import date
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import os
+from django.urls import reverse,reverse_lazy
 # Create your views here.
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
@@ -193,7 +213,7 @@ def CariView(request):
     else:
         data = TPegawaiSapk.objects.all()
     context = {
-        'data': data,
+        'page_obj': data,
         'jumlah':jumlah,
     }
     return render(request, 'pegawai/tpegawaisapk_list.html', context)
@@ -203,6 +223,7 @@ def ProfileView(request, nip_baru):
     pegawai = TPegawaiSapk.objects.get(nip_baru=nip_baru)
     template_name = 'pegawai/profilebaru.html'
     form = FormTpegawaiSapk(instance=pegawai)
+    print (pegawai)
     context = {
         'pegawai':pegawai,
         'form':form
@@ -210,8 +231,8 @@ def ProfileView(request, nip_baru):
     return render(request,template_name, context)
 
 def RiwayatJabatanView(request, nip_baru):
-    pegawai = TPegawaiSapk.objects.get(nip_baru=nip_baru)
-    jabatan = TRiwayatJabatan.objects.filter(id_orang=pegawai.pns_id).order_by('tmt_jabatan')
+    pegawai = get_object_or_404(TPegawaiSapk, nip_baru=nip_baru)
+    jabatan = TRiwayatJabatan.objects.filter(nip=nip_baru).order_by('tmt_jabatan')
     template_name = 'pegawai/trwjabatan_list.html'
     context = {
          'jabatan':jabatan,
@@ -276,6 +297,7 @@ def Riwayatdp3View(request, nip_baru):
          'pegawai':pegawai,
     }
     return render(request,template_name, context)
+
 
 def search(request):
     object_list = TPegawaiSapk.objects.all()
@@ -356,3 +378,136 @@ def filter(request):
     jumlah = user_list.count
 
     return render(request, 'pegawai/search_results.html', {'filter': user_filter, 'jumlah':jumlah})
+
+
+def PensiunView(request):
+    pegawai = TPegawaiSapk.objects.all()
+    for x in pegawai:
+        tahun = x.nip_baru[0:4]
+        bulan = x.nip_baru[4:6]
+        tanggal = x.nip_baru[6:8]
+        tgllahir = '%s-%s-%s' %(tanggal,bulan,tahun)
+        get_bup = TJabatan.objects.filter(id=x.jabatan)
+
+
+        # # tgllahir = datetime.strptime(x.tgl_lhr, '%d-%m-%Y')
+        # tahun=relativedelta(years=tahun + get_bup.bup)
+        # umur = relativedelta(tgllahir, datetime.datetime.now())
+        # bulan = str(tgllahir.month)
+        # tgl = str(tgllahir.day)
+        # tglpensiun = '%s-%s-%s' %(tgl,bulan,str(tahun.years))
+        # print(get_bup.bup, tglpensiun) 
+        # buat = TPensiun.objects.create(pns_id = x.pns_id, umur = umur.years, tmt_pensiun = inputdbnya)
+    return render(request, 'pegawai/pensiun_list.html') 
+
+class InputSkpView(CreateView):
+    def get(self, request, *args, **kwargs):
+        context = {'form': FormRiwayatSkp()}
+        return render(request, 'pegawai/inputskp.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = FormRiwayatSkp(request.POST)
+        if form.is_valid():
+            book = form.save()
+            book.save()
+            return HttpResponseRedirect(reverse_lazy('pegawai:skpdetail', args=[book.id]))
+        return render(request, 'pegawai/inputskp.html', {'form': form})
+
+def InputJabatanView(request):
+    # dictionary for initial data with
+    # field names as keys
+    context ={}
+ 
+    # add the dictionary during initialization
+    form = FormTRiwayatJabatan(request.POST or None)
+    if form.is_valid():
+        form.save()
+    context['form']= form
+    return render(request, "pegawai/jabataninput.html", context)
+
+def EditJabatanView(request, id):
+    data = TRiwayatJabatan.objects.get(id=id)
+    form = FormTRiwayatJabatan(instance=data)
+    context={
+        'form':form
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('pegawai:jabatan')
+    else:
+      pass
+    return render(request, 'pegawai/jabataninput.html', context)
+
+# class JabatanDetailView(DetailView):
+#     model = TRiwayatJabatan
+#     context_object_name: 'data'
+    
+#     def get_object(self, queryset=None):
+#         return TRiwayatJabatan.objects.get(id = id)
+
+
+def SkpDetailView(request, id):
+    data = TRiwayatDp3.objects.get(id=id)
+    context = {
+        'form' : FormRiwayatSkp(instance=data)
+    }
+   
+
+    return render(request, 'pegawai/triwayatdp3_detail.html', context)
+
+def InputPangkatView(request, id):
+    data = TRiwayatGolongan.objects.get(pk=id)
+    form = FormTRiwayatGolongan(instance=data)
+    form.fields['jenis_kp'].disabled = True
+    form.fields['id_golongan'].disabled = True
+    form.fields['sk_nomor'].disabled = True
+    form.fields['sk_tanggal'].disabled = True
+    form.fields['tmt_golongan'].disabled = True
+    form.fields['mk_golongan_tahun'].disabled = True
+    form.fields['mk_golongan_bulan'].disabled = True
+    context={
+        'form':form
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('golongan',data.id_orang.nip_baru)
+    else:
+      pass
+    return render(request, 'pegawai/pangkatinput.html', context)
+
+# class InpunPangkatView(UpdateView):
+#     model = TRiwayatGolongan
+#     form_class = FormTRiwayatGolongan
+#     template_name = "pegawai/pangkatinput.html"
+
+#     def get_form(self, form_class=None):
+#         form = super(FormTRiwayatGolongan, self).get_form(form_class)
+#         if not self.request.user.is_superuser:
+#             # Disable these fields
+#             form.fields["jenis_kp"].disabled = True
+#             form.fields["id_golongan"].disabled = True
+#             form.fields["sk_nomor"].disabled = True
+#             form.fields["sk_tanggal"].disabled = True
+#             form.fields["tmt_golongan"].disabled = True
+#             form.fields["mk_golongan_tahun"].disabled = True
+#             form.fields["mk_golongan_bulan"].disabled = True
+#         return form
+
+#     def form_valid(self, form):
+#         form.save()
+#         return redirect(reverse("pegawai:golongan"))  
+
+
+#  register_form = RegistrationForm()
+#     if request.method=='POST':
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             new_user = User.objects.create_user(username=request.POST['username'], 
+#                                             email=request.POST['email'], 
+#                                             password=request.POST['password1'])
+#             new_user.is_active = False
+#             new_user.save()
+#             return HttpResponseRedirect(reverse('index'))
+#     return render_to_response('registration/registration_form.html'{'form':register_form})

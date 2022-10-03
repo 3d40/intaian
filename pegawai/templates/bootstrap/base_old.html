@@ -1,11 +1,6 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  {% include 'bootstrap/exclude/head.html' %}
+{% include 'bootstrap/exclude/head.html' %}
 <body>
-  <div class="container-scroller">
-    <!-- partial:partials/_navbar.html -->
-    {% include 'bootstrap/exclude/navbar.html' %}
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
       <!-- partial:partials/_settings-panel.html -->
@@ -188,113 +183,15 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'pegawai:datalist'%}">
+            <a class="nav-link"  href="{% url 'pegawai:datalist' %}">
               <i class="icon-layout menu-icon"></i>
-              <span class="menu-title">Data Kepegawaian</span>
+              <span class="menu-title">Data Pegawai</span>
             </a>
-          </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
-              <i class="icon-columns menu-icon"></i>
-              <span class="menu-title">Form elements</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="form-elements">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="pages/forms/basic_elements.html">Basic Elements</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-              <i class="icon-bar-graph menu-icon"></i>
-              <span class="menu-title">Charts</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="charts">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
-              <i class="icon-grid-2 menu-icon"></i>
-              <span class="menu-title">Tables</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="tables">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/tables/basic-table.html">Basic table</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-              <i class="icon-contract menu-icon"></i>
-              <span class="menu-title">Icons</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="icons">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-              <i class="icon-head menu-icon"></i>
-              <span class="menu-title">User Pages</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="auth">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-              </ul>
-            </div>
-          </li>-->
-          <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
-              <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Dokumen</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="error">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> Golongan </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> Jabatan </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> Keluarga </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> DP3 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> Hukuman Disiplin </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> Pendidikan </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> Pelatihan/Diklat</a></li>
-              </ul>
-            </div>
           </li>
       </nav>
-      <!-- partial -->
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-md-12 grid-margin">
-              <div class="row">
-                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                  <h3 class="font-weight-bold">Selamat Datang <label class="badge badge-danger">{{user.username}}</label></h3>
-                  <h6 class="font-weight-normal mb-0">All systems are running smoothly! You have <span class="text-primary">3 unread alerts!</span></h6>
-                </div>
-                
-              </div>
-            </div>
-          </div>
       {% block content %}
       {% endblock %}
-              
-        <!-- partial:partials/_footer.html -->
-        {% include 'bootstrap/footprint.html' %}
-        <!-- partial -->
-        {% include 'bootstrap/exclude/foot.html' %}
 </body>
-
+{% include 'bootstrap/exclude/foot.html' %}
 </html>
 

@@ -1,6 +1,11 @@
 {% extends 'bootstrap/base.html' %}
 {% block content %}
-<div class="main-panel">
+<div>
+  {% for obj in page_obj %}
+  {{obj.nama}}-{{tglpensiun}}<br>
+  {% endfor %}
+</div>
+          <div class="main-panel">
             <div class="content-wrapper">
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
@@ -16,6 +21,7 @@
                               <th width="100px">Jabatan</th>
                               <th >Instansi Induk</th>
                               <th>Tingkat Pendidikan</th>
+                              <th>Tanggal Pensiun</th>
                             </tr>
                           </thead>
                           {% for obj in page_obj %}
@@ -53,6 +59,9 @@
                               <td>
                                {{obj.tingkat_pendidikan}}
                               </td>
+                              <td>
+                                {{tglpensiun}}
+                               </td>
                             </tr>
                           </tbody>
                           {% endfor %}

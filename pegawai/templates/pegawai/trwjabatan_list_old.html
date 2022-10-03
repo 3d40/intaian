@@ -1,18 +1,9 @@
 {% extends 'bootstrap/base.html' %}
 {% block content %}
-<section style="background-color: #eee;">
-  <div class="container py-5">
-    <div class="row">
-        <div class="col">
-          <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-            <ol class="breadcrumb mb-0">
-              {% include 'bootstrap/exclude/navlink.html' %}
-          </nav>
-        </div>
-      </div>
-        <div class="content-wrapper">
-          <div class="col-lg-12 grid-margin stretch-card">
-            <div class="card">
+<div class="main-panel">
+    <div class="content-wrapper">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
             <div class="card-body">
               <h4 class="card-title">{{pegawai}}</h4>
               <p class="card-description">
@@ -26,45 +17,39 @@
                         Nomor
                       </th>
                       <th>
-                        Jenis Kenaikan Pangkat
+                        Nama Jabatan
                       </th>
                       <th>
-                        Nama Pangkat
+                        Jenis Jabatan
                       </th>
                       <th>
-                        Nomor SK Kenaikan Pangkat
+                        Nomor Surat Keputusan
                       </th>
                       <th>
-                        Tanggal SK Kenaikan Pangkat
-                      </th>
-                      <th>
-                        TMT Kenaikan Pangkat
+                        TMT Jabatan
                       </th>
                       <th>
                         Arsip
                       </th>
                     </tr>
                   </thead>
-                  {% for data in golongan %}
+                  {% for data in jabatan %}
                   <tbody>
                     <tr>
                       <td>
                         {{forloop.counter}}
                       </td>
                       <td>
-                       <a href="{% url 'pegawai:inputpangkat' data.id %}">{{data.jenis_kp}}</a> 
+                        {{data.id_jabatan}}
                       </td>
                       <td>
-                        {{data.id_golongan}}
+                        {{data.jenis_jabatan}}
                       </td>
                       <td>
-                        {{data.sk_nomor}}
+                        {{data.nomor_sk}}
                       </td>
                       <td>
-                        {{data.sk_tanggal}}
-                      </td>
-                      <td>
-                        {{data.tmt_golongan}}
+                        {{data.tmt_jabatan}}
                       </td>
                       <td>
                        ((data belum ada))
@@ -77,4 +62,7 @@
             </div>
           </div>
         </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+    {% include 'bootstrap/footprint.html' %}
 {% endblock %}
