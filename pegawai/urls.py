@@ -1,7 +1,8 @@
 from django.contrib.auth import views as auth_views
 from . import views
-from . import views  as core_views
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
  
 app_name = 'pegawai'
 urlpatterns = [
@@ -30,4 +31,4 @@ urlpatterns = [
     path('pegawai/input/jabatan/<str:id>', views.EditJabatanView, name='editjabatan'),
     path('pegawai/input/pangkat/<str:id>', views.InputPangkatView, name='inputpangkat'),
 
-]
+]+ static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

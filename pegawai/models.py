@@ -334,7 +334,7 @@ class TRiwayatGolongan(models.Model):
     jumlah_angka_kredit_tambahan = models.DecimalField(db_column='Jumlah_Angka_Kredit_Tambahan', max_digits=7, decimal_places=3, blank=True, null=True)  # Field name made lowercase.
     mk_golongan_tahun = models.IntegerField(db_column='MK_Golongan_Tahun', blank=True, null=True)  # Field name made lowercase.
     mk_golongan_bulan = models.IntegerField(db_column='MK_Golongan_Bulan', blank=True, null=True)  # Field name made lowercase.
-    dokumen = models.FileField(upload_to='documents/')
+    dokumen = models.FileField(upload_to='upload/')
     
     class Meta:
         managed = False

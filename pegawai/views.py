@@ -19,6 +19,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils import timezone
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 
 from .forms import *
 from django.views.generic import (
@@ -59,6 +60,8 @@ from datetime import date
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import os
 from django.urls import reverse,reverse_lazy
+IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg', 'pdf']
+
 # Create your views here.
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
@@ -466,16 +469,29 @@ def InputPangkatView(request, id):
     form.fields['tmt_golongan'].disabled = True
     form.fields['mk_golongan_tahun'].disabled = True
     form.fields['mk_golongan_bulan'].disabled = True
-    context={
-        'form':form
-    }
-    if request.method == 'POST':
+    if request.method == 'POST' :
+        form = FormTRiwayatGolongan(request.POST, request.FILE)
         if form.is_valid():
-            form.save()
-            return redirect('golongan',data.id_orang.nip_baru)
-    else:
-      pass
+            golongan_pr =form.save(commit=False)
+            golongan_pr.dokumen =request.FILE['dokumen']
+            file_type = golongan_pr.dokumen.url.split('.')[-1]
+            file_type = file_type.lower()
+            if file_type not in IMAGE_FILE_TYPES:
+                return HttpResponse ('Tipe Data Tidak mendukung')
+            golongan_pr.save()
+            return render(request, 'pegawai/pangkatinput.html', {'golongan_pr':golongan_pr})
+    context = {'form':form}
     return render(request, 'pegawai/pangkatinput.html', context)
+
+    # if request.method == 'POST':
+    #     # form = FormTRiwayatGolongan(request.POST, request.FILE)
+    #     if form.is_valid():
+    #         form.save()
+    #         print( filename, data.id_orang,'_',data.id_orang.nip_baru,'_',data.id_golongan, uploaded_file_url)
+    #     return redirect('pegawai:golongan', data.id_orang.nip_baru)
+    # else:
+    #   pass
+    # return render(request, 'pegawai/pangkatinput.html', {'form':form})
 
 # class InpunPangkatView(UpdateView):
 #     model = TRiwayatGolongan

@@ -127,6 +127,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -134,7 +137,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Login & Logout URLs
-LOGIN_URL = '/login/'
+LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/pegawai'
 LOGOUT_REDIRECT_URL = '/'
 
@@ -145,6 +148,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'bonces143@gmail.com'
 EMAIL_HOST_PASSWORD = 'aamjygkoyaungxmb'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/upload/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
