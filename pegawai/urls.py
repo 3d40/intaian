@@ -30,5 +30,7 @@ urlpatterns = [
     path('pegawai/input/jabatan', views.InputJabatanView, name='inputjabatan'),
     path('pegawai/input/jabatan/<str:id>', views.EditJabatanView, name='editjabatan'),
     path('pegawai/input/pangkat/<str:id>', views.InputPangkatView, name='inputpangkat'),
-
-]+ static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)
+] 
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -6,6 +6,7 @@ from operator import ge
 from pickle import FALSE
 from pickletools import int4
 from re import template
+from time import strftime
 from dateutil.relativedelta import *
 from codecs import namereplace_errors
 import datetime
@@ -458,72 +459,27 @@ def SkpDetailView(request, id):
    
 
     return render(request, 'pegawai/triwayatdp3_detail.html', context)
+import pandas as pd
 
 def InputPangkatView(request, id):
-    data = TRiwayatGolongan.objects.get(pk=id)
-    form = FormTRiwayatGolongan(instance=data)
-    form.fields['jenis_kp'].disabled = True
-    form.fields['id_golongan'].disabled = True
-    form.fields['sk_nomor'].disabled = True
-    form.fields['sk_tanggal'].disabled = True
-    form.fields['tmt_golongan'].disabled = True
-    form.fields['mk_golongan_tahun'].disabled = True
-    form.fields['mk_golongan_bulan'].disabled = True
-    if request.method == 'POST' :
-        form = FormTRiwayatGolongan(request.POST, request.FILE)
+    gol = TRiwayatGolongan.objects.get(pk=id)
+    form = FormTRiwayatGolongan(instance=gol)
+    # form.fields['jenis_kp'].disabled = True
+    # form.fields['id_golongan'].disabled = True
+    # form.fields['sk_nomor'].disabled = True
+    # form.fields['sk_tanggal'].disabled = True
+    # form.fields['tmt_golongan'].disabled = True
+    # form.fields['mk_golongan_tahun'].disabled = True
+    # form.fields['mk_golongan_bulan'].disabled = True
+    if request.method == 'POST' and  request.FILES:
+        df = pd.to_datetime(request.POST['sk_tanggal'])
+        print(df)
+        form = form
         if form.is_valid():
-            golongan_pr =form.save(commit=False)
-            golongan_pr.dokumen =request.FILE['dokumen']
-            file_type = golongan_pr.dokumen.url.split('.')[-1]
-            file_type = file_type.lower()
-            if file_type not in IMAGE_FILE_TYPES:
-                return HttpResponse ('Tipe Data Tidak mendukung')
-            golongan_pr.save()
-            return render(request, 'pegawai/pangkatinput.html', {'golongan_pr':golongan_pr})
-    context = {'form':form}
-    return render(request, 'pegawai/pangkatinput.html', context)
 
-    # if request.method == 'POST':
-    #     # form = FormTRiwayatGolongan(request.POST, request.FILE)
-    #     if form.is_valid():
-    #         form.save()
-    #         print( filename, data.id_orang,'_',data.id_orang.nip_baru,'_',data.id_golongan, uploaded_file_url)
-    #     return redirect('pegawai:golongan', data.id_orang.nip_baru)
-    # else:
-    #   pass
-    # return render(request, 'pegawai/pangkatinput.html', {'form':form})
-
-# class InpunPangkatView(UpdateView):
-#     model = TRiwayatGolongan
-#     form_class = FormTRiwayatGolongan
-#     template_name = "pegawai/pangkatinput.html"
-
-#     def get_form(self, form_class=None):
-#         form = super(FormTRiwayatGolongan, self).get_form(form_class)
-#         if not self.request.user.is_superuser:
-#             # Disable these fields
-#             form.fields["jenis_kp"].disabled = True
-#             form.fields["id_golongan"].disabled = True
-#             form.fields["sk_nomor"].disabled = True
-#             form.fields["sk_tanggal"].disabled = True
-#             form.fields["tmt_golongan"].disabled = True
-#             form.fields["mk_golongan_tahun"].disabled = True
-#             form.fields["mk_golongan_bulan"].disabled = True
-#         return form
-
-#     def form_valid(self, form):
-#         form.save()
-#         return redirect(reverse("pegawai:golongan"))  
-
-
-#  register_form = RegistrationForm()
-#     if request.method=='POST':
-#         form = RegistrationForm(request.POST)
-#         if form.is_valid():
-#             new_user = User.objects.create_user(username=request.POST['username'], 
-#                                             email=request.POST['email'], 
-#                                             password=request.POST['password1'])
-#             new_user.is_active = False
-#             new_user.save()
-#             return HttpResponseRedirect(reverse('index'))
-#     return render_to_response('registration/registration_form.html'{'form':register_form})
+            form.save()
+            return render(request, 'pegawai/pangkatinput.html', {'form': form})
+        else:               
+            return HttpResponse("DATA TIDAK VALID")
+    return render(request, 'pegawai/pangkatinput.html',{'form':form})
+         

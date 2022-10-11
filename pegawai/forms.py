@@ -22,6 +22,12 @@ class FormTRiwayatGolongan(ModelForm):
     class Meta:
         model = TRiwayatGolongan
         fields = ['jenis_kp', 'id_golongan', 'sk_nomor', 'sk_tanggal','tmt_golongan','mk_golongan_tahun', 'mk_golongan_bulan', 'dokumen']
+        # widgets = {
+        #     'sk_tanggal': forms.DateField(widget=forms.DateInput(format='%d-%m-%Y', attrs={'class': 'datepicker'}), input_formats=('%d-%m-%Y', )),
+        #     'tmt_golongan': forms.DateField(widget=forms.DateInput(format='%d-%m-%Y', attrs={'class': 'datepicker'}), input_formats=('%d-%m-%Y', ))
+        
+        # }
+        
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Required')

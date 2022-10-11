@@ -5,10 +5,12 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from ast import Str
 from asyncio.windows_events import NULL
 from datetime import datetime
 from email.policy import default
 import imp
+from locale import CHAR_MAX
 from pyexpat import model
 from statistics import mode
 from tabnanny import verbose
@@ -16,6 +18,8 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils.text import slugify
+
 
 
 class TJenisJabatan(models.Model):
@@ -310,14 +314,30 @@ class TRiwayatJabatan(models.Model):
     id_satuan_kerja = models.CharField(db_column='Id_Satuan_Kerja', max_length=32, verbose_name ='Satuan Kerja')  # Field name made lowercase.
     tmt_pelantikan = models.DateField(db_column='TMT_Pelantikan', blank=True, null=True) # Field name made lowercase.
     dokumen = models.FileField(upload_to='documents/')
-    # slug = models.SlugField('SLUG', unique=True, allow_unicode=True, help_text='one word for title alias.')
+    slug = models.SlugField('SLUG', unique=True, allow_unicode=True, help_text='one word for title alias.')
 
     class Meta:
         managed = False
         db_table = 't_riwayat_jabatan'
+    
+    def save(self, *args, **kwargs):
+        self.url= slugify(self.nama)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.nama
+import os
+
+def user_directory_path_SKKP(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    ext = filename.split('.')[1]
+    golongan = instance.id_golongan.nama_pangkat
+    filelama =instance.id_orang.nip_baru+"_"+golongan,ext
+    filename = {'SKKP_'}, filelama
+    return '{0}/{1}'.format(instance.id_orang.nip_baru, filename)
+
+from django.core.validators import FileExtensionValidator
+from django.conf import settings
 
 class TRiwayatGolongan(models.Model):
     id = models.CharField(db_column='ID', primary_key=True, max_length=32)  # Field name made lowercase.
@@ -334,14 +354,27 @@ class TRiwayatGolongan(models.Model):
     jumlah_angka_kredit_tambahan = models.DecimalField(db_column='Jumlah_Angka_Kredit_Tambahan', max_digits=7, decimal_places=3, blank=True, null=True)  # Field name made lowercase.
     mk_golongan_tahun = models.IntegerField(db_column='MK_Golongan_Tahun', blank=True, null=True)  # Field name made lowercase.
     mk_golongan_bulan = models.IntegerField(db_column='MK_Golongan_Bulan', blank=True, null=True)  # Field name made lowercase.
-    dokumen = models.FileField(upload_to='upload/')
+    dokumen = models.FileField(upload_to=user_directory_path_SKKP, null=True, verbose_name="", validators=[FileExtensionValidator( ['pdf'] )])
+    slug = models.SlugField(max_length=500, unique=True, blank=True)
     
-    class Meta:
+    class Meta:             
         managed = False
         db_table = 't_riwayat_golongan'
 
     def __str__(self):
-        return self.jenis_kp
+        return self.jenis_kp +":"+ str(self.dokumen.name)
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.jenis_kp)
+        super(TRiwayatGolongan, self).save(*args, **kwargs)
+
+    def get_url(self):
+        return reverse('task_detail', kwargs={
+            'slug':self.slug
+        })
+
+
 
 class TRiwayatDp3(models.Model):
     id = models.CharField(db_column='ID', primary_key=True, max_length=32)  # Field name made lowercase.

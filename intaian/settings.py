@@ -121,6 +121,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATE_INPUT_FORMATS =  ['%d-%m-%Y']
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -149,5 +151,5 @@ EMAIL_HOST_USER = 'bonces143@gmail.com'
 EMAIL_HOST_PASSWORD = 'aamjygkoyaungxmb'
 
 MEDIA_URL = '/upload/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/upload/')
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

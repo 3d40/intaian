@@ -1,4 +1,5 @@
 {% extends 'bootstrap/base.html' %}
+{% load static %}
 {% block content %}
 <section style="background-color: #eee;">
   <div class="container py-5">
@@ -67,7 +68,10 @@
                         {{data.tmt_golongan}}
                       </td>
                       <td>
-                       ((data belum ada))
+                        {% if data.dokumen %}
+                        <a href="{{data.dokumen.url}}">Lihat Arsip</a>
+                        {% endif %}
+                       <!-- {{data.dokumen}} -->
                       </td>
                     </tr>
                   </tbody>

@@ -6,5 +6,9 @@
     {{form.as_p}}
     <button type="submit">Upload Berkas</button>
 </form>
+{% if img_obj %}  
+<h3>Succesfully uploaded : {{img_obj.caption}}</h3>  
+<img src="{{ img_obj.image.url}}" alt="connect" style="max-height:300px">  
+{% endif %}  
 </div>
 {% endblock %}
