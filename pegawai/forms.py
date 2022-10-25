@@ -6,7 +6,6 @@ from .models import *
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.forms.models import inlineformset_factory, BaseInlineFormSet
 
 class FormTpegawaiSapk(ModelForm):
     class Meta:
@@ -23,11 +22,9 @@ class FormTRiwayatGolongan(ModelForm):
         model = TRiwayatGolongan
         fields = ['jenis_kp', 'id_golongan', 'sk_nomor', 'sk_tanggal','tmt_golongan','mk_golongan_tahun', 'mk_golongan_bulan', 'dokumen']
         # widgets = {
-        #     'sk_tanggal': forms.DateField(widget=forms.DateInput(format='%d-%m-%Y', attrs={'class': 'datepicker'}), input_formats=('%d-%m-%Y', )),
-        #     'tmt_golongan': forms.DateField(widget=forms.DateInput(format='%d-%m-%Y', attrs={'class': 'datepicker'}), input_formats=('%d-%m-%Y', ))
-        
-        # }
-        
+        #     'sk_tanggal': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
+        #     'tmt_golongan': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
+        #     }
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Required')

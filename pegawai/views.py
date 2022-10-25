@@ -227,7 +227,7 @@ def ProfileView(request, nip_baru):
     pegawai = TPegawaiSapk.objects.get(nip_baru=nip_baru)
     template_name = 'pegawai/profilebaru.html'
     form = FormTpegawaiSapk(instance=pegawai)
-    print (pegawai)
+    print (pegawai.tgl_lhr, pegawai.nama, pegawai.gol, pegawai.nik, pegawai.bpjs)
     context = {
         'pegawai':pegawai,
         'form':form
@@ -281,7 +281,7 @@ class ListTPegawaisapkjfs(ListView):
 
 def RiwayatGolonganView(request, nip_baru):
     pegawai = TPegawaiSapk.objects.get(nip_baru=nip_baru)
-    golongan = TRiwayatGolongan.objects.filter(id_orang=pegawai.pns_id).order_by('sk_tanggal')
+    golongan = TRiwayatGolongan.objects.filter(nip_baru=pegawai.nip_baru).order_by('sk_tanggal')
     template_name = 'pegawai/trwgolongan_list.html'
     form = FormTRiwayatGolongan()
     context = {
@@ -459,27 +459,17 @@ def SkpDetailView(request, id):
    
 
     return render(request, 'pegawai/triwayatdp3_detail.html', context)
-import pandas as pd
 
 def InputPangkatView(request, id):
-    gol = TRiwayatGolongan.objects.get(pk=id)
-    form = FormTRiwayatGolongan(instance=gol)
-    # form.fields['jenis_kp'].disabled = True
-    # form.fields['id_golongan'].disabled = True
-    # form.fields['sk_nomor'].disabled = True
-    # form.fields['sk_tanggal'].disabled = True
-    # form.fields['tmt_golongan'].disabled = True
-    # form.fields['mk_golongan_tahun'].disabled = True
-    # form.fields['mk_golongan_bulan'].disabled = True
-    if request.method == 'POST' and  request.FILES:
-        df = pd.to_datetime(request.POST['sk_tanggal'])
-        print(df)
-        form = form
+    gol = get_object_or_404(TRiwayatGolongan, pk=id)
+    form=FormTRiwayatGolongan(instance=gol)
+    print(gol.orang_id.pns_id)
+    if request.method == 'POST': 
+        gol.save() 
+        form = FormTRiwayatGolongan(request.POST, request.FILES, instance=gol)
         if form.is_valid():
-
             form.save()
             return render(request, 'pegawai/pangkatinput.html', {'form': form})
-        else:               
-            return HttpResponse("DATA TIDAK VALID")
-    return render(request, 'pegawai/pangkatinput.html',{'form':form})
-         
+        else:
+            pass
+    return render(request, 'pegawai/pangkatinput.html', {'form':form})

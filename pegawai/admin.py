@@ -22,5 +22,4 @@ admin.site.register(TJabatan)
 admin.site.register(TUser)
 admin.site.register(TJenisUser)
 admin.site.register(TEselon)
-admin.site.register(TPensiun)
 
