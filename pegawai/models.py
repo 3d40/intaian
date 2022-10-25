@@ -325,36 +325,7 @@ class TRiwayatJabatan(models.Model):
 
 from django.core.validators import FileExtensionValidator
 
-# def user_directory_path_SKKP(instance, filename):
-#     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
-#     ext = filename.split('.')[-1]
-#     golongan = (instance.id_golongan.nama_pangkat, ext)
-#     nip = instance.nip_baru
-#     filelama = instance.nip_baru,golongan
-#     filename = "{}".format("SKKP_",filelama)
-#     print(type(nip))
-#     return "{}/{}".format(nip, filename) 
-
-# def _upload_path(instance,filename):
-#     return instance.get_upload_path(filename)
-import os 
-# from django.utils.deconstruct import deconstructible
-# @deconstructible
-# class PathAndRename(object):
-#    def __init__(self, sub_path):
-#     self.path = sub_path
-
-#    def __call__(self, instance, filename):
-#        # add extension as per your requirement, I am using .png
-#        ext = "pdf"
-#        golongan = instance.orang_id.nip_baru
-#        print(golongan)
-#        # set filename as random string
-#        filename = '{}.{}'.format(golongan, ext)
-#        # return the whole path to the file
-#        return os.path.join(self.path, filename)
-
-def _upload_path(instance,filename):
+def _upload_path_kp(instance,filename):
     return instance.get_upload_path(filename)
 
 
@@ -374,7 +345,7 @@ class TRiwayatGolongan(models.Model):
     jumlah_angka_kredit_tambahan = models.DecimalField(db_column='Jumlah_Angka_Kredit_Tambahan', max_digits=7, decimal_places=3, blank=True, null=True)  # Field name made lowercase.
     mk_golongan_tahun = models.IntegerField(db_column='MK_Golongan_Tahun', blank=True, null=True)  # Field name made lowercase.
     mk_golongan_bulan = models.IntegerField(db_column='MK_Golongan_Bulan', blank=True, null=True)  # Field name made lowercase.
-    dokumen = models.FileField(upload_to= _upload_path, null=True, validators=[FileExtensionValidator( ['pdf'] )])
+    dokumen = models.FileField(upload_to= _upload_path_kp, null=True, validators=[FileExtensionValidator( ['pdf'] )])
     nama = models.CharField(db_column='Nama', max_length=255, blank=True, null=True)
     
     class Meta:             
@@ -389,11 +360,13 @@ class TRiwayatGolongan(models.Model):
         print(self.orang_id)
         filename = {"SKKP_"},filelama
         return "{}/{}".format(self.nip_baru, filename)
-    
+
+def _upload_path_skp(instance,filename):
+    return instance.get_upload_path(filename)
 
 class TRiwayatDp3(models.Model):
     id = models.CharField(db_column='ID', primary_key=True, max_length=32)  # Field name made lowercase.
-    id_orang = models.ForeignKey('TPegawaiSapk', max_length=32, on_delete=models.DO_NOTHING, db_column='id_orang')
+    id_pns = models.ForeignKey('TPegawaiSapk', max_length=32, on_delete=models.DO_NOTHING, db_column='ID_PNS')
     id_jenis_jabatan = models.ForeignKey('TJenisJabatan', max_length=32, on_delete=models.CASCADE, db_column='id_jenis_jabatan')
     nama_jenis_jabatan = models.CharField(db_column='NAMA_JENIS_JABATAN', max_length=27, blank=True, null=True)  # Field name made lowercase.
     tahun = models.IntegerField(db_column='TAHUN')  # Field name made lowercase.
@@ -423,14 +396,21 @@ class TRiwayatDp3(models.Model):
     golongan_atasan_penilai = models.CharField(db_column='GOLONGAN_ATASAN_PENILAI', max_length=12, blank=True, null=True)  # Field name made lowercase.
     tmt_golongan_atasan_penilai = models.CharField(db_column='TMT_GOLONGAN_ATASAN_PENILAI', max_length=14, blank=True, null=True)  # Field name made lowercase.
     nama_unor_atasan_penilai = models.CharField(db_column='NAMA_UNOR_ATASAN_PENILAI', max_length=85, blank=True, null=True) # Field name made lowercase.
-    dokumen = models.FileField(upload_to='documents/')
+    dokumen = models.FileField(upload_to=_upload_path_skp)
 
     class Meta:
         managed = False
         db_table = 't_riwayat_dp3'
 
     def __str__(self):
-        return str(self.id_orang)
+        return str(self.id_pns)
+    
+    def get_upload_path(self,filename):
+        filelama = self.id_pns.nip_baru, self.tahun
+        print(self.id_pns)
+        filename = {"SKP_"},filelama
+        return "{}/{}".format(self.id_pns.nip_baru, filename)
+    
 
 
 

@@ -453,12 +453,17 @@ def EditJabatanView(request, id):
 
 def SkpDetailView(request, id):
     data = TRiwayatDp3.objects.get(id=id)
-    context = {
-        'form' : FormRiwayatSkp(instance=data)
-    }
-   
-
-    return render(request, 'pegawai/triwayatdp3_detail.html', context)
+    form = FormRiwayatSkp(instance=data)
+    if request.method == 'POST':
+        data.save()
+        form = FormRiwayatSkp(request.POST, request.FILES, instance=data)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pegawai/skpinput.html', {'form':form})
+        else:
+            pass
+    return render(request, 'pegawai/skpinput.html', {'form':form})
+    
 
 def InputPangkatView(request, id):
     gol = get_object_or_404(TRiwayatGolongan, pk=id)
