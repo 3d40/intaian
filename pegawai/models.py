@@ -13,7 +13,9 @@ import imp
 from locale import CHAR_MAX
 from pyexpat import model
 from statistics import mode
+from tabnanny import verbose
 from typing_extensions import Self
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -194,7 +196,7 @@ class TPegawaiSapk(models.Model):
         
 
     def __str__(self):
-        return self.nip_baru
+        return self.nama
 
 
 class TPendidikan(models.Model):
@@ -298,30 +300,39 @@ class TUser(models.Model):
     def __str__(self):
         return self.pengguna.username
 
+def _upload_path_jabatan(instance,filename):
+    nip = instance.orang_id.nip_baru
+    print(nip)
+    return instance.get_upload_path(filename)
 
 class TRiwayatJabatan(models.Model):
-    id = models.CharField(db_column='ID', primary_key=True, max_length=32,)  # Field name made lowercase.
+    id = models.CharField(db_column='ID', primary_key=True, max_length=32, default=uuid.uuid4, editable=False)  # Field name made lowercase.
     nip = models.CharField(db_column='NIP', max_length=18)  # Field name made lowercase.
-    id_orang = models.ForeignKey('TPegawaiSapk', max_length=32, on_delete=models.CASCADE, db_column='id_orang')  # Field name made lowercase.
-    nama = models.CharField(db_column='Nama', max_length=40)  # Field name made lowercase.
+    orang_id = models.ForeignKey('TPegawaiSapk', blank = True, null=True, on_delete = models.CASCADE, db_column='Id_Orang')  # Field name made lowercase.
+    # nama = models.CharField(db_column='Nama', max_length=40)  # Field name made lowercase.
     unor = models.ForeignKey('TUnor', max_length=32, on_delete=models.CASCADE, db_column='Id_Unor')  # Field name made lowercase.
     jenis_jabatan = models.ForeignKey('TJenisJabatan', blank=True, null=True, on_delete=models.CASCADE, db_column='Id_Jenis_Jabatan')  # Field name made lowercase.
     id_jabatan = models.ForeignKey('TJabatan' , max_length=32, on_delete=models.CASCADE, db_column='id_jabatan',  verbose_name ='Nama Jabatan')  # Field name made lowercase.
-    id_eselon = models.ForeignKey('TEselon' , max_length=32, on_delete=models.CASCADE, db_column='id_eselon')  # Field name made lowercase.
-    eselon = models.CharField(db_column='Eselon', max_length=5, blank=True, null=True)  # Field name made lowercase.
-    tmt_jabatan = models.DateField(db_column='TMT_JABATAN', max_length=14, default='01 - 01 - 2022')  # Field name made lowercase.
+    id_eselon = models.ForeignKey('TEselon' , max_length=32, on_delete=models.CASCADE, db_column='id_eselon', verbose_name="Eselon")  # Field name made lowercase.
+    # eselon = models.CharField(db_column='Eselon', max_length=5, blank=True, null=True)  # Field name made lowercase.
+    tmt_jabatan = models.DateField(db_column='TMT_JABATAN', max_length=14, default="1900-01-01", null =True, blank=True)  # Field name made lowercase.
     nomor_sk = models.CharField(db_column='Nomor_SK', max_length=52, blank=True, null=True)  # Field name made lowercase.
     tanggal_sk = models.DateField(db_column='Tanggal_SK', blank=True, null=True, default='01 - 01 - 2022')  # Field name made lowercase.
-    id_satuan_kerja = models.CharField(db_column='Id_Satuan_Kerja', max_length=32, verbose_name ='Satuan Kerja')  # Field name made lowercase.
+    # id_satuan_kerja = models.CharField(db_column='Id_Satuan_Kerja', max_length=32, verbose_name ='Satuan Kerja')  # Field name made lowercase.
     tmt_pelantikan = models.DateField(db_column='TMT_Pelantikan', blank=True, null=True) # Field name made lowercase.
-    dokumen = models.FileField(upload_to='documents/')
+    dokumen = models.FileField(upload_to=_upload_path_jabatan)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 't_riwayat_jabatan'
 
     def __str__(self):
         return self.nama
+    
+    def get_upload_path(self,filename):
+        filelama = self.nip, self.id_jabatan.nama_jabatan
+        filename = {"JABATAN_"},filelama
+        return "{}/{}".format(self.nip, filename)
 
 from django.core.validators import FileExtensionValidator
 
@@ -357,7 +368,6 @@ class TRiwayatGolongan(models.Model):
     
     def get_upload_path(self,filename):
         filelama = self.orang_id.nip_baru, self.id_golongan.nama_pangkat
-        print(self.orang_id)
         filename = {"SKKP_"},filelama
         return "{}/{}".format(self.nip_baru, filename)
 

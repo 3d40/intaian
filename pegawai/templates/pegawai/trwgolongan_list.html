@@ -15,7 +15,7 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
             <div class="card-body">
-              <h4 class="card-title">{{pegawai}}</h4>
+              <h4 class="card-title">{{pegawai.nama}}</h4>
               <p class="card-description">
                 {{pegawai.nip_baru}} <code>{{judul}}</code>
               </p>
@@ -70,8 +70,9 @@
                       <td>
                         {% if data.dokumen %}
                         <a href="{{data.dokumen.url}}">Lihat Arsip</a>
+                        {% else %}
+                        data belum data
                         {% endif %}
-                       <!-- {{data.dokumen}} -->
                       </td>
                     </tr>
                   </tbody>

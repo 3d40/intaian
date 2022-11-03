@@ -15,16 +15,13 @@ class FormTpegawaiSapk(ModelForm):
 class FormTRiwayatJabatan(ModelForm):
     class Meta:
         model = TRiwayatJabatan
-        fields = [  'id_jabatan','jenis_jabatan', 'eselon', 'tmt_jabatan', 'nomor_sk', 'tanggal_sk', 'id_satuan_kerja', 'tmt_pelantikan']
-
+        fields = [  'id_jabatan','jenis_jabatan', 'id_eselon', 'tmt_jabatan', 'nomor_sk', 'tanggal_sk', 'unor', 'tmt_pelantikan', 'dokumen']
+        # fields = '__all__'
+        
 class FormTRiwayatGolongan(ModelForm):
     class Meta:
         model = TRiwayatGolongan
         fields = ['jenis_kp', 'id_golongan', 'sk_nomor', 'sk_tanggal','tmt_golongan','mk_golongan_tahun', 'mk_golongan_bulan', 'dokumen']
-        # widgets = {
-        #     'sk_tanggal': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
-        #     'tmt_golongan': forms.DateInput(format=('%m/%d/%Y'), attrs={'class':'form-control', 'placeholder':'Select a date', 'type':'date'}),
-        #     }
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Required')
@@ -64,3 +61,4 @@ class FormRiwayatSkp(ModelForm):
             'nama_unor_atasan_penilai', 
             'dokumen'
             ]
+    

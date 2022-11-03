@@ -27,8 +27,9 @@ urlpatterns = [
     #input data
     path('pegawai/input/skp', views.InputSkpView.as_view(), name='inputskp'),
     path('pegawai/input/skp/detail/<str:id>', views.SkpDetailView, name='skpdetail'),
-    path('pegawai/input/jabatan', views.InputJabatanView, name='inputjabatan'),
+    path('pegawai/input/jabatan/tambah', views.InputJabatanView, name='inputjabatan'),
     path('pegawai/input/jabatan/<str:id>', views.EditJabatanView, name='editjabatan'),
+    # path('pegawai/input/jabatan/<str:nip>/tambah/', views.TambahJabatanView, name='tambahjabatan'),
     path('pegawai/input/pangkat/<str:id>', views.InputPangkatView, name='inputpangkat'),
 ] 
 if settings.DEBUG:
