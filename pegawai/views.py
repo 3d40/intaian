@@ -236,7 +236,7 @@ def ProfileView(request, nip_baru):
 
 def RiwayatJabatanView(request, nip_baru):
     pegawai = get_object_or_404(TPegawaiSapk, nip_baru=nip_baru)
-    jabatan = TRiwayatJabatan.objects.filter(nip=nip_baru).order_by('tmt_jabatan')
+    jabatan = TRiwayatJabatan.objects.filter(orang_id=pegawai.pns_id).order_by('tmt_jabatan')
     template_name = 'pegawai/trwjabatan_list.html'
     context = {
          'jabatan':jabatan,
@@ -404,37 +404,40 @@ def PensiunView(request):
         # buat = TPensiun.objects.create(pns_id = x.pns_id, umur = umur.years, tmt_pensiun = inputdbnya)
     return render(request, 'pegawai/pensiun_list.html') 
 
-class InputSkpView(CreateView):
-    def get(self, request, *args, **kwargs):
-        context = {'form': FormRiwayatSkp()}
-        return render(request, 'pegawai/inputskp.html', context)
+# class InputSkpView(CreateView):
+#     pengguna = request.session['user']
+#     def get(self, request, *args, **kwargs):    
+#         pns = get_object_or_404(TPegawaiSapk, nip_baru=pengguna)
+#         context = {'form': FormRiwayatSkp(instance=pns, initial={'orang':pns, 'unor':pns.unor_induk})}
+#         return render(request, 'pegawai/skpinput.html', context)
 
-    def post(self, request, *args, **kwargs):
-        form = FormRiwayatSkp(request.POST)
-        if form.is_valid():
-            TRiwayatDp3 = form.save()
-            TRiwayatDp3.save()
-            return HttpResponseRedirect(reverse_lazy('pegawai:skpdetail', args=[TRiwayatDp3.id]))
-        return render(request, 'pegawai/inputskp.html', {'form': form})
+#     def post(self, request, *args, **kwargs):
+#         form = FormRiwayatSkp(request.POST, request.FILES)
+#         if form.is_valid():
+#             TRiwayatDp3 = form.save()
+#             TRiwayatDp3.save()
+#             return HttpResponseRedirect(reverse_lazy('pegawai:skpdetail', args=[TRiwayatDp3.id]))
+#         return render(request, 'pegawai/skpinput.html', {'form': form})
 
 
 def InputJabatanView(request):
-    pns = get_object_or_404(TPegawaiSapk, nip_baru= request.session['user'])
-    form = FormTRiwayatJabatan()
+    pengguna = request.session['user']
+    pns = get_object_or_404(TPegawaiSapk, nip_baru=pengguna)
+    form=FormTRiwayatJabatan(instance=pns, initial={'orang':pns, 'unor':pns.unor_induk}) 
     if request.method == 'POST':
+        form = FormTRiwayatJabatan(request.POST, request.FILES)
         if form.is_valid():
-            jabatan = TRiwayatJabatan.objects.create(
-                'nip'==request.session['user'],
-                'orang_id'== pns.pns_id,
-                'nama'==pns.nama,
-                'unor'==pns.unor,
-                )
-            jabatan.save()
+            form = FormTRiwayatJabatan(request.POST, request.FILES)
+            berkas = TBerkas.objects.create(
+                pns_id=pns,
+                unor=pns.unor, 
+                status=1) 
+            berkas.save()
             form.save()
-            return redirect('pegawai:jabatan')
-        else:
-            print('gagal', request.POST) 
             return redirect('pegawai:jabatan', request.session['user'])
+        else:
+            print('gagal')
+            
     return render(request, "pegawai/tambahjabatan.html",{'form':form})
 
 
@@ -450,7 +453,7 @@ def EditJabatanView(request, id):
             pass
     return render(request, 'pegawai/tambahjabatan.html', {'form':form})
 
-
+@login_required
 def SkpDetailView(request, id):
     data = TRiwayatDp3.objects.get(id=id)
     form = FormRiwayatSkp(instance=data)
@@ -465,12 +468,14 @@ def SkpDetailView(request, id):
     return render(request, 'pegawai/skpinput.html', {'form':form})
 
     
-
+@login_required
 def InputPangkatView(request, id):
+    pengguna = request.session['user']
+    pns = get_object_or_404(TPegawaiSapk, nip_baru=pengguna)
     gol = get_object_or_404(TRiwayatGolongan, id = id)
     form=FormTRiwayatGolongan(instance=gol)
     print(gol.orang_id.pns_id)
-    if request.method == 'POST': 
+    if request.method == 'POST':
         gol.save() 
         form = FormTRiwayatGolongan(request.POST, request.FILES, instance=gol)
         if form.is_valid():
@@ -480,3 +485,23 @@ def InputPangkatView(request, id):
             pass
     return render(request, 'pegawai/pangkatinput.html', {'form':form})
     
+@login_required
+def InputSkpView(request):
+    pengguna = request.session['user']
+    pns = get_object_or_404(TPegawaiSapk, nip_baru=pengguna)
+    form=FormRiwayatSkp(instance=pns, initial={'orang':pns, 'unor':pns.unor_induk}) 
+    if request.method == 'POST':
+        form = FormRiwayatSkp(request.POST, request.FILES)
+        if form.is_valid():
+            form = FormRiwayatSkp(request.POST, request.FILES)
+            berkas = TBerkas.objects.create(
+                pns=pns.pns_id,
+                unor=pns.unor_induk_bkd, 
+                status=1) 
+            berkas.save()
+            form.save()
+            return redirect('pegawai:jabatan', request.session['user'])
+        else:
+            print('gagal')
+            
+    return render(request, "pegawai/tambahjabatan.html",{'form':form})

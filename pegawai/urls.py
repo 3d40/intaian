@@ -25,7 +25,7 @@ urlpatterns = [
     path('pegawai/pensiun', views.PensiunView, name='pensiun'),
 
     #input data
-    path('pegawai/input/skp', views.InputSkpView.as_view(), name='inputskp'),
+    path('pegawai/input/skp', views.InputSkpView, name='inputskp'),
     path('pegawai/input/skp/detail/<str:id>', views.SkpDetailView, name='skpdetail'),
     path('pegawai/input/jabatan/tambah', views.InputJabatanView, name='inputjabatan'),
     path('pegawai/input/jabatan/<str:id>', views.EditJabatanView, name='editjabatan'),

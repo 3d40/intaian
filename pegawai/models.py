@@ -21,6 +21,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
 import sys
+import uuid
 
 
 
@@ -301,25 +302,24 @@ class TUser(models.Model):
         return self.pengguna.username
 
 def _upload_path_jabatan(instance,filename):
-    nip = instance.orang_id.nip_baru
+    nip = instance.orang
     print(nip)
     return instance.get_upload_path(filename)
 
 class TRiwayatJabatan(models.Model):
-    id = models.CharField(db_column='ID', primary_key=True, max_length=32, default=uuid.uuid4, editable=False)  # Field name made lowercase.
-    nip = models.CharField(db_column='NIP', max_length=18)  # Field name made lowercase.
-    orang_id = models.ForeignKey('TPegawaiSapk', blank = True, null=True, on_delete = models.CASCADE, db_column='Id_Orang')  # Field name made lowercase.
+    id = models.UUIDField(db_column='ID', primary_key=True, max_length=32, default=uuid.uuid4, editable=False)  # Field name made lowercase.
+    # nip = models.CharField(db_column='NIP', max_length=18)  # Field name made lowercase.
+    orang = models.ForeignKey('TPegawaiSapk', blank = True, null=True, on_delete = models.CASCADE, db_column='Id_Orang')  # Field name made lowercase.
     # nama = models.CharField(db_column='Nama', max_length=40)  # Field name made lowercase.
     unor = models.ForeignKey('TUnor', max_length=32, on_delete=models.CASCADE, db_column='Id_Unor')  # Field name made lowercase.
     jenis_jabatan = models.ForeignKey('TJenisJabatan', blank=True, null=True, on_delete=models.CASCADE, db_column='Id_Jenis_Jabatan')  # Field name made lowercase.
-    id_jabatan = models.ForeignKey('TJabatan' , max_length=32, on_delete=models.CASCADE, db_column='id_jabatan',  verbose_name ='Nama Jabatan')  # Field name made lowercase.
-    id_eselon = models.ForeignKey('TEselon' , max_length=32, on_delete=models.CASCADE, db_column='id_eselon', verbose_name="Eselon")  # Field name made lowercase.
-    # eselon = models.CharField(db_column='Eselon', max_length=5, blank=True, null=True)  # Field name made lowercase.
+    id_jabatan = models.ForeignKey('TJabatan' , on_delete=models.CASCADE, db_column='id_jabatan',  verbose_name ='Nama Jabatan')  # Field name made lowercase.
+    eselon = models.ForeignKey('TEselon' , max_length=32, on_delete=models.CASCADE, db_column='id_eselon', verbose_name="Eselon", default=53)  # Field name made lowercase.
     tmt_jabatan = models.DateField(db_column='TMT_JABATAN', max_length=14, default="1900-01-01", null =True, blank=True)  # Field name made lowercase.
     nomor_sk = models.CharField(db_column='Nomor_SK', max_length=52, blank=True, null=True)  # Field name made lowercase.
-    tanggal_sk = models.DateField(db_column='Tanggal_SK', blank=True, null=True, default='01 - 01 - 2022')  # Field name made lowercase.
+    tanggal_sk = models.DateField(db_column='Tanggal_SK', blank=True, null=True, default="1900-01-01")  # Field name made lowercase.
     # id_satuan_kerja = models.CharField(db_column='Id_Satuan_Kerja', max_length=32, verbose_name ='Satuan Kerja')  # Field name made lowercase.
-    tmt_pelantikan = models.DateField(db_column='TMT_Pelantikan', blank=True, null=True) # Field name made lowercase.
+    tmt_pelantikan = models.DateField(db_column='TMT_Pelantikan', blank=True, null=True, default="1900-01-01") # Field name made lowercase.
     dokumen = models.FileField(upload_to=_upload_path_jabatan)
 
     class Meta:
@@ -327,12 +327,12 @@ class TRiwayatJabatan(models.Model):
         db_table = 't_riwayat_jabatan'
 
     def __str__(self):
-        return self.nama
+        return self.orang.nama
     
     def get_upload_path(self,filename):
-        filelama = self.nip, self.id_jabatan.nama_jabatan
+        filelama = self.orang.nip_baru, self.id_jabatan.nama_jabatan
         filename = {"JABATAN_"},filelama
-        return "{}/{}".format(self.nip, filename)
+        return "{}/{}".format(self.orang.nip_baru, filename)
 
 from django.core.validators import FileExtensionValidator
 
@@ -375,11 +375,10 @@ def _upload_path_skp(instance,filename):
     return instance.get_upload_path(filename)
 
 class TRiwayatDp3(models.Model):
-    id = models.CharField(db_column='ID', primary_key=True, max_length=32)  # Field name made lowercase.
+    id = models.UUIDField(db_column='ID', primary_key = True, default = uuid.uuid4, editable = False)  # Field name made lowercase.
     id_pns = models.ForeignKey('TPegawaiSapk', max_length=32, on_delete=models.DO_NOTHING, db_column='ID_PNS')
     id_jenis_jabatan = models.ForeignKey('TJenisJabatan', max_length=32, on_delete=models.CASCADE, db_column='id_jenis_jabatan')
-    nama_jenis_jabatan = models.CharField(db_column='NAMA_JENIS_JABATAN', max_length=27, blank=True, null=True)  # Field name made lowercase.
-    tahun = models.IntegerField(db_column='TAHUN')  # Field name made lowercase.
+    tahun = models.IntegerField(db_column='TAHUN', default="2010")  # Field name made lowercase.
     kesetiaan = models.DecimalField(db_column='KESETIAAN', max_digits=5, decimal_places=2)  # Field name made lowercase.
     prestasi_kerja = models.DecimalField(db_column='PRESTASI_KERJA', max_digits=5, decimal_places=2)  # Field name made lowercase.
     tanggung_jawab = models.DecimalField(db_column='TANGGUNG_JAWAB', max_digits=5, decimal_places=2)  # Field name made lowercase.
@@ -416,14 +415,11 @@ class TRiwayatDp3(models.Model):
         return str(self.id_pns)
     
     def get_upload_path(self,filename):
-        filelama = self.id_pns.nip_baru, self.tahun
+        filelama = self.id_pns, self.tahun
         print(self.id_pns)
         filename = {"SKP_"},filelama
-        return "{}/{}".format(self.id_pns.nip_baru, filename)
+        return "{}/{}".format(self.id_pns, filename)
     
-
-
-
 
 class TOpd(models.Model):
     id = models.CharField(db_column='ID', primary_key=True, max_length=32)  # Field name made lowercase.
@@ -509,3 +505,23 @@ class TJenisUser(models.Model):
 #         return str(self.pns_id)
 
 
+class TBerkas(models.Model):
+    status_choice =(
+        ("1", "User"),
+        ("2", "Verifikasi"),
+        ("3", "Valid"),
+        ("4", "Rejected"),
+        )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4(), editable=False)
+    pns_id = models.ForeignKey('TPegawaiSapk',  on_delete=models.DO_NOTHING, db_column='pns')
+    unor = models.ForeignKey('TUnor',on_delete=models.DO_NOTHING, db_column='unor')
+    #nama_berkas = models.CharField(max_length=255, db_column='nama', null=True, blank=True)
+    status = models.IntegerField(choices=status_choice, default=1)
+    
+    class Meta:
+        managed = False
+        db_table = 't_berkas'
+
+    def __str__(self):
+        return str(self.pns_id)
+    

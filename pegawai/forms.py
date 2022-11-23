@@ -15,8 +15,12 @@ class FormTpegawaiSapk(ModelForm):
 class FormTRiwayatJabatan(ModelForm):
     class Meta:
         model = TRiwayatJabatan
-        fields = [  'id_jabatan','jenis_jabatan', 'id_eselon', 'tmt_jabatan', 'nomor_sk', 'tanggal_sk', 'unor', 'tmt_pelantikan', 'dokumen']
-        # fields = '__all__'
+        # fields = [  'id_jabatan','jenis_jabatan', 'id_eselon', 'tmt_jabatan', 'nomor_sk', 'tanggal_sk', 'unor', 'tmt_pelantikan', 'dokumen']
+        fields = '__all__'
+        widgets = {
+            'unor': forms.Select(attrs={'class': 'form-control selectpicker', 'data-live-search':'true'})
+            }
+
         
 class FormTRiwayatGolongan(ModelForm):
     class Meta:
