@@ -1,0 +1,39 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
+{% if berkaslist %}
+<ul>
+  {% for data in berkaslist %}
+	<li>
+	  <a href="{{ data.get_absolute_url }}">{{data}}</a>
+	</li>
+  {% endfor %}
+</ul>
+{% else %}
+  <p>Tidak berkas yang tersedia.</p>
+{% endif %}
+
+GOLONGAN
+{% for x in golongan %}
+<ul>
+	{{x.id_golongan}} || {{x.sk_nomor}} || {{x.sk_tanggal}} || {{x.mk_golongan_tahun}}  || {{x.mk_golongan_bulan}} || <a href="{{ x.get_absolute_url }}">{{x.dokumen}}</a>  
+</ul>
+
+{% endfor %}
+
+DP3
+{% for y in dp3 %}
+<ul>
+	{{y}}
+</ul>
+
+{% endfor %}
+
+
+<p>JABATAN</p>
+{% for z in jabatan %}
+<ul>
+	{{z}}
+</ul>
+
+{% endfor %}
+{% endblock %}

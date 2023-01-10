@@ -31,6 +31,11 @@ urlpatterns = [
     path('pegawai/input/jabatan/<str:id>', views.EditJabatanView, name='editjabatan'),
     # path('pegawai/input/jabatan/<str:nip>/tambah/', views.TambahJabatanView, name='tambahjabatan'),
     path('pegawai/input/pangkat/<str:id>', views.InputPangkatView, name='inputpangkat'),
+
+
+    #berkas
+    path('pegawai/berkas', views.BerkasView.as_view(), name='berkaslist'),
+
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)

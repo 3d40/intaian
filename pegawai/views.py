@@ -505,3 +505,26 @@ def InputSkpView(request):
             print('gagal')
             
     return render(request, "pegawai/tambahjabatan.html",{'form':form})
+
+    
+class BerkasView(ListView):
+    model = TBerkas
+    context_object_name = 'berkaslist'   # your own name for the list as a template variable
+    
+    def get_context_data(self, **kwargs):
+        sesi = self.request.session['user']
+        queryset = TBerkas.objects.filter(pns_id = sesi)
+        # Call the base implementation first to get the context
+        context = super(BerkasView, self).get_context_data(**kwargs)
+        # Create any data and add it to the context
+        context.update(
+            {'golongan': TRiwayatGolongan.objects.all().filter(nip_baru=sesi),
+            'dp3': TRiwayatDp3.objects.all().filter(id_pns=sesi),
+            'jabatan':TRiwayatJabatan.objects.all().filter(orang_id=sesi)})
+        print(context)
+        return context
+# def BerkasView (request):
+#     pengguna = TPegawaiSapk.objects.get(nip_baru = request.session['user'])
+#     berkas = get_list_or_404(TBerkas, pns_id=pengguna.pns_id)
+#     return render(request, 'pegawai/tberkas_list.html', {'pengguna':pengguna})
+
